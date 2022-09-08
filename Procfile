@@ -1,1 +1,1 @@
-web: HEROKU=true ./bin/start
+web: HEROKU=true sigsci/bin/sigsci-start ./bin/start
