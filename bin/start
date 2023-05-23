@@ -2,9 +2,6 @@
 
 set -e
 
-# NOTE: The canonical source for this file is in the metabase/metabase repository.
-# Please update it there then copy to the metabase/metabase-deploy repository.
-
 # Translate various Heroku environment variables to Metabase equivalents
 
 if [ "$PORT" ]; then
@@ -13,7 +10,7 @@ fi
 
 # Heroku Postgres
 if [ "$DATABASE_URL" ]; then
-    if [[ $string == *"?"* ]]; then
+    if [[ "$DATABASE_URL" == *"?"* ]]; then
         # if DATABASE_URL already has a query string don't mess with it
         export MB_DB_CONNECTION_URI="$DATABASE_URL"
     else
@@ -86,9 +83,10 @@ JAVA_OPTS+=" -Djava.awt.headless=true" # don't try to start AWT. Not sure this d
 JAVA_OPTS+=" -Dfile.encoding=UTF-8"    # Use UTF-8
 
 # Set timezone using the JAVA_TIMEZONE variable if present
-if [ "$JAVA_TIMEZONE"]; then
+if [ "$JAVA_TIMEZONE" ]; then
     echo "  -> Timezone setting detected: $JAVA_TIMEZONE"
     JAVA_OPTS+=" -Duser.timezone=$JAVA_TIMEZONE"
 fi
 
+# shellcheck disable=SC2086
 exec java $JAVA_OPTS -jar ./target/uberjar/metabase.jar
